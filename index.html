@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>lofi hideout</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"VT323",monospace}
+  html,body{height:100%}
+  body{
+    background:#6e4b3f;
+    color:#f9e5e5;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.25),rgba(0,0,0,.25) 1px,transparent 1px,transparent 2px);
+    pointer-events:none;z-index:99;
+  }
+  #wrap{width:90%;max-width:420px;background:rgba(30,30,20,.9);border:2px solid #b5c7f2;border-radius:12px;padding:25px 20px 30px;text-align:center;box-shadow:0 0 20px #b5c7f255;backdrop-filter:blur(6px)}
+  h1{font-size:2.2em;margin-bottom:6px;color:#CEA2D7;text-transform:lowercase;letter-spacing:1px}
+  h2{font-size:1.3em;font-weight:400;margin-bottom:20px;color:#f9e5e5;text-transform:lowercase}
+  #mascotWrap{height:160px;position:relative;margin:0 auto 15px}
+  #ball{width:70px;height:70px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);animation:float 4s ease-in-out infinite}
+  #ball svg{width:100%;height:100%;filter:drop-shadow(0 0 8px #b5c7f2)}
+  @keyframes float{50%{transform:translate(-50%,-50%) translateY(-12px)}}
+  button{background:#b5c7f2;color:#1a120b;border:none;padding:10px 18px;font-size:1.1em;border-radius:6px;margin:6px;cursor:pointer;transition:.2s;text-transform:lowercase}
+  button:hover{transform:scale(1.05);background:#d0dfff;color:#1a120b}
+  #log{height:110px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:10px;margin-top:18px;font-size:1.1em;line-height:1.4;color:#f9e5e566;text-transform:lowercase}
+  #log span{display:block;margin:3px 0;color:#f9e5e5;padding-bottom:4px}
+  .sub{font-size:0.9em;color:#ffffff;margin-top:4px}
+  audio{position:absolute;left:-999px}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="mascotWrap">
+    <div id="ball">
+      <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="55" fill="#ebccb0"/>
+        <circle cx="45" cy="52" r="5" fill="#6e4b3f"/>
+        <circle cx="75" cy="52" r="5" fill="#6e4b3f"/>
+        <path d="M40 75 Q60 88 80 75" stroke="#6e4b3f" stroke-width="5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <h1>lofi hideout</h1>
+  <h2>it's okay to be you.</h2>
+
+  <button onclick="doBreathe()">breathe</button>
+  <p class="sub">press to reset</p>
+
+  <button onclick="doKind('overwhelm')">overwhelm</button>
+  <button onclick="doKind('exhaustion')">exhaustion</button>
+  <button onclick="doKind('self-doubt')">self-doubt</button>
+  <button onclick="doKind('growth')">growth</button>
+  <button onclick="doKind('rest')">rest</button>
+  <button onclick="togglePlay()">🎵 lofi</button>
+
+  <div id="log"><span>welcome, quiet soul. ☕</span></div>
+</div>
+
+<audio id="player" loop src="lofi.mp3"></audio>
+
+<script>
+  const log=document.getElementById('log');
+  const scripts={
+    overwhelm:[
+      "hey, it's okay if everything feels like too much.",
+      "you don't have to fix today; you can just pause, because nothing needs solving right now.",
+      "the world moves fast, but you're allowed to move slowly at your own quiet pace.",
+      "your mind feels loud, but you don't need to quiet it; just let it be.",
+      "feeling stretched thin doesn't mean you're failing; it just means you're human.",
+      "some things can wait, because you deserve rest first and tonight can be gentle.",
+      "being overwhelmed doesn't mean you're broken; it means you care deeply.",
+      "let your shoulders drop just a little, i'm right here with you.",
+      "you don't need to hold everything, not tonight; you can set it down.",
+      "you've done enough for today; you don't need permission, but here it is anyway."
+    ],
+    exhaustion:[
+      "if being around people drained you, that makes sense; you give a lot.",
+      "you're not antisocial; you're selective with your energy, and that's wisdom.",
+      "it's okay to need silence after conversations while your nervous system recalibrates.",
+      "you don't owe anyone more versions of yourself tonight; you can just be one.",
+      "if small talk wore you out, you're not strange; you're thoughtful.",
+      "you don't need to replay what you said today; you can let it fade gently.",
+      "being social takes courage, and resting afterward is part of that courage.",
+      "you don't have to be 'on' anymore; you can power down safely here.",
+      "if your energy feels borrowed, it's time to give it back to yourself.",
+      "quiet isn't loneliness; sometimes it's recovery."
+    ],
+    "self-doubt":[
+      "you don't need to be louder to matter; your presence already counts.",
+      "there's no single timeline for becoming yourself; you're not behind.",
+      "you don't need to prove your worth today; it's already there.",
+      "your quietness isn't a weakness; it's where your strength hides.",
+      "stop comparing your interior to someone else's highlight reel.",
+      "small steps are still movement, so keep going gently.",
+      "you are allowed to be a work in progress and still be whole.",
+      "the voice in your head isn't always telling the truth, be kind to it anyway.",
+      "you have survived 100 percent of your bad days; look how far you've come.",
+      "you don't need to be perfect to be lovable; just be here."
+    ],
+    growth:[
+      "listen to what your silence is trying to tell you; it knows the way.",
+      "what if you stopped fighting yourself and just started listening?",
+      "you are growing even when you can't feel it, like a forest at night.",
+      "your sensitivity is a gift; don't let the world make you hard.",
+      "finding yourself often starts with admitting you're lost.",
+      "softness is a form of courage in a world this loud.",
+      "give yourself the same grace you give everyone else.",
+      "your heart knows the answer; just get quiet enough to hear it.",
+      "change isn't always a loud explosion; sometimes it's a slow thaw.",
+      "you are the sky; the thoughts are just clouds, so let them pass."
+    ],
+    rest:[
+      "you're allowed to stop trying for the day; nothing bad will happen.",
+      "you don't need to earn rest; it's not a reward, it's a need.",
+      "productive rest is doing absolutely nothing without guilt.",
+      "the to-do list will be there tomorrow; your peace won't wait.",
+      "rest is not giving up; it's refueling quietly.",
+      "close your eyes and let the day dissolve; you did enough.",
+      "sometimes the most productive thing you can do is nap.",
+      "your value isn't measured by how much you finished today.",
+      "give your mind a place to land and sink into the quiet.",
+      "sleep well; you are safe, and i'll see you tomorrow."
+    ]
+  };
+
+  function addLine(txt){
+    log.insertAdjacentHTML('beforeend',`<span>${txt}<br><br></span>`);
+    log.scrollTop=log.scrollHeight;
+  }
+
+  function doKind(cat){addLine(randomPick(scripts[cat]));}
+  function doBreathe(){
+    const steps=["inhale...","hold...","exhale..."];
+    let idx=0;
+    addLine("🌬️ breathe starts...");
+    const tick=setInterval(()=>{
+      addLine(steps[idx%3]);
+      idx++;
+      if(idx>=9){clearInterval(tick);addLine("all done. exhale complete—feel lighter? ✨");}
+    },4000);
+  }
+  function togglePlay(){
+    const p=document.getElementById('player');
+    p.volume=.35;
+    p.paused?p.play():p.pause();
+  }
+  function randomPick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+</script>
+</body>
+</html>
