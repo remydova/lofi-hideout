@@ -4,151 +4,457 @@
 <meta charset="UTF-8">
 <title>lofi hideout</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="a quiet place for quiet souls. it's okay to be you.">
+<meta name="theme-color" content="#1a120e">
+<meta property="og:title" content="lofi hideout">
+<meta property="og:description" content="it's okay to be you.">
+<meta property="og:image" content="icon-512.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:"VT323",monospace}
-  html,body{height:100%}
-  body{
-    background:#6e4b3f;
-    color:#f9e5e5;
-    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  :root {
+    --bg:        #1a120e;
+    --card:      rgba(22, 18, 30, 0.92);
+    --border:    #b5c7f2;
+    --glow:      #b5c7f255;
+    --accent:    #CEA2D7;
+    --warm:      #f9e5e5;
+    --muted:     #a89aaa;
+    --btn-bg:    #b5c7f2;
+    --btn-text:  #1a120b;
+    --btn-hover: #d0dfff;
+    --log-bg:    rgba(0,0,0,0.45);
   }
-  body::after{
-    content:"";position:fixed;inset:0;
-    background:repeating-linear-gradient(0deg,rgba(0,0,0,.25),rgba(0,0,0,.25) 1px,transparent 1px,transparent 2px);
-    pointer-events:none;z-index:99;
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    font-family: "VT323", monospace;
   }
-  #wrap{width:90%;max-width:420px;background:rgba(30,30,20,.9);border:2px solid #b5c7f2;border-radius:12px;padding:25px 20px 30px;text-align:center;box-shadow:0 0 20px #b5c7f255;backdrop-filter:blur(6px)}
-  h1{font-size:2.2em;margin-bottom:6px;color:#CEA2D7;text-transform:lowercase;letter-spacing:1px}
-  h2{font-size:1.3em;font-weight:400;margin-bottom:20px;color:#f9e5e5;text-transform:lowercase}
-  #mascotWrap{height:160px;position:relative;margin:0 auto 15px}
-  #ball{width:70px;height:70px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);animation:float 4s ease-in-out infinite}
-  #ball svg{width:100%;height:100%;filter:drop-shadow(0 0 8px #b5c7f2)}
-  @keyframes float{50%{transform:translate(-50%,-50%) translateY(-12px)}}
-  button{background:#b5c7f2;color:#1a120b;border:none;padding:10px 18px;font-size:1.1em;border-radius:6px;margin:6px;cursor:pointer;transition:.2s;text-transform:lowercase}
-  button:hover{transform:scale(1.05);background:#d0dfff;color:#1a120b}
-  #log{height:110px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:6px;padding:10px;margin-top:18px;font-size:1.1em;line-height:1.4;color:#f9e5e566;text-transform:lowercase}
-  #log span{display:block;margin:3px 0;color:#f9e5e5;padding-bottom:4px}
-  .sub{font-size:0.9em;color:#ffffff;margin-top:4px}
-  audio{position:absolute;left:-999px}
+
+  body {
+    background: var(--bg);
+    color: var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 100dvh;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,.18),
+      rgba(0,0,0,.18) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(110,75,63,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(181,199,242,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 80% at 50% 50%, rgba(30,20,50,0.6) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #wrap {
+    position: relative;
+    z-index: 1;
+    width: 94%;
+    max-width: 480px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 34px 30px 40px;
+    text-align: center;
+    box-shadow:
+      0 0 0 1px rgba(181,199,242,0.1),
+      0 0 30px var(--glow),
+      0 0 80px rgba(181,199,242,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: fadeIn 1.2s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #mascotWrap {
+    height: 150px;
+    position: relative;
+    margin: 0 auto 14px;
+  }
+
+  #ball {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: float 4s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  #ball svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px #b5c7f2aa);
+    transition: filter 0.3s;
+  }
+
+  #ball:hover svg { filter: drop-shadow(0 0 18px #b5c7f2ee); }
+
+  @keyframes float {
+    0%, 100% { transform: translate(-50%, -50%); }
+    50%       { transform: translate(-50%, calc(-50% - 12px)); }
+  }
+
+  h1 {
+    font-size: clamp(2.4em, 8vw, 3em);
+    margin-bottom: 4px;
+    color: var(--accent);
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(206,162,215,0.4);
+  }
+
+  h2 {
+    font-family: "Space Mono", monospace;
+    font-style: italic;
+    font-size: clamp(0.75em, 3vw, 0.88em);
+    font-weight: 400;
+    margin-bottom: 22px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 auto 22px;
+    opacity: 0.4;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  button {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    padding: 9px 16px;
+    font-size: 1.05em;
+    font-family: "VT323", monospace;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+  }
+
+  button:hover {
+    transform: scale(1.06) translateY(-1px);
+    background: var(--btn-hover);
+    box-shadow: 0 4px 16px rgba(181,199,242,0.25);
+  }
+
+  button:active { transform: scale(0.97); }
+
+  button.breathe-btn {
+    background: rgba(181,199,242,0.15);
+    color: var(--border);
+    border: 1px solid rgba(181,199,242,0.3);
+    font-size: 1.2em;
+    padding: 10px 22px;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  button.breathe-btn:hover {
+    background: rgba(181,199,242,0.22);
+    box-shadow: 0 0 20px rgba(181,199,242,0.15);
+  }
+
+  button.lofi-btn {
+    background: rgba(206,162,215,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(206,162,215,0.3);
+  }
+
+  button.lofi-btn:hover {
+    background: rgba(206,162,215,0.25);
+    box-shadow: 0 4px 16px rgba(206,162,215,0.2);
+  }
+
+  button.lofi-btn.playing {
+    background: rgba(206,162,215,0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(206,162,215,0.3); }
+    50%       { box-shadow: 0 0 32px rgba(206,162,215,0.55); }
+  }
+
+  .sub {
+    font-size: 0.75em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-family: "Space Mono", monospace;
+    opacity: 0.6;
+  }
+
+  #log {
+    height: 118px;
+    overflow-y: auto;
+    background: var(--log-bg);
+    border: 1px solid rgba(181,199,242,0.1);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 18px;
+    font-size: 1.05em;
+    line-height: 1.5;
+    text-transform: lowercase;
+    scroll-behavior: smooth;
+  }
+
+  #log::-webkit-scrollbar { width: 3px; }
+  #log::-webkit-scrollbar-track { background: transparent; }
+  #log::-webkit-scrollbar-thumb { background: rgba(181,199,242,0.2); border-radius: 2px; }
+
+  #log span {
+    display: block;
+    margin: 2px 0 6px;
+    color: var(--warm);
+    opacity: 0;
+    animation: slideIn 0.4s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #log .welcome { color: var(--muted); }
+
+  .credit {
+    margin-top: 16px;
+    font-family: "Space Mono", monospace;
+    font-size: 0.62em;
+    color: var(--muted);
+    opacity: 0.4;
+    letter-spacing: 0.5px;
+  }
+
+  audio { position: absolute; left: -9999px; }
 </style>
 </head>
 <body>
 <div id="wrap">
+
   <div id="mascotWrap">
-    <div id="ball">
+    <div id="ball" onclick="blink()" title="click me ✨">
       <svg viewBox="0 0 120 120">
         <circle cx="60" cy="60" r="55" fill="#ebccb0"/>
-        <circle cx="45" cy="52" r="5" fill="#6e4b3f"/>
-        <circle cx="75" cy="52" r="5" fill="#6e4b3f"/>
+        <circle id="eyeL" cx="45" cy="52" r="5" fill="#6e4b3f"/>
+        <circle id="eyeR" cx="75" cy="52" r="5" fill="#6e4b3f"/>
         <path d="M40 75 Q60 88 80 75" stroke="#6e4b3f" stroke-width="5" fill="none" stroke-linecap="round"/>
       </svg>
     </div>
   </div>
+
   <h1>lofi hideout</h1>
   <h2>it's okay to be you.</h2>
+  <div class="divider"></div>
 
-  <button onclick="doBreathe()">breathe</button>
-  <p class="sub">press to reset</p>
+  <button class="breathe-btn" onclick="doBreathe()">breathe 🌬️</button>
+  <p class="sub">press to begin a breathing cycle</p>
 
-  <button onclick="doKind('overwhelm')">overwhelm</button>
-  <button onclick="doKind('exhaustion')">exhaustion</button>
-  <button onclick="doKind('self-doubt')">self-doubt</button>
-  <button onclick="doKind('growth')">growth</button>
-  <button onclick="doKind('rest')">rest</button>
-  <button onclick="togglePlay()">🎵 lofi</button>
+  <div class="btn-group">
+    <button onclick="doKind('overwhelm')">overwhelm</button>
+    <button onclick="doKind('exhaustion')">exhaustion</button>
+    <button onclick="doKind('self-doubt')">self-doubt</button>
+    <button onclick="doKind('growth')">growth</button>
+    <button onclick="doKind('rest')">rest</button>
+    <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
+  </div>
 
-  <div id="log"><span>welcome, quiet soul. ☕</span></div>
+  <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
+  <p class="credit">a remy dova experience ✦</p>
 </div>
 
 <audio id="player" loop src="lofi.mp3"></audio>
 
 <script>
-  const log=document.getElementById('log');
-  const scripts={
-    overwhelm:[
+  const log     = document.getElementById('log');
+  const lofiBtn = document.getElementById('lofiBtn');
+
+  const scripts = {
+    overwhelm: [
       "hey, it's okay if everything feels like too much.",
-      "you don't have to fix today; you can just pause, because nothing needs solving right now.",
+      "you don't have to fix today — you can just pause. nothing needs solving right now.",
       "the world moves fast, but you're allowed to move slowly at your own quiet pace.",
-      "your mind feels loud, but you don't need to quiet it; just let it be.",
-      "feeling stretched thin doesn't mean you're failing; it just means you're human.",
-      "some things can wait, because you deserve rest first and tonight can be gentle.",
-      "being overwhelmed doesn't mean you're broken; it means you care deeply.",
-      "let your shoulders drop just a little, i'm right here with you.",
-      "you don't need to hold everything, not tonight; you can set it down.",
-      "you've done enough for today; you don't need permission, but here it is anyway."
+      "your mind feels loud, but you don't need to quiet it. just let it be.",
+      "feeling stretched thin doesn't mean you're failing. it just means you're human.",
+      "some things can wait. you deserve rest first, and tonight can be gentle.",
+      "being overwhelmed doesn't mean you're broken. it means you care deeply.",
+      "let your shoulders drop just a little. i'm right here with you.",
+      "you don't need to hold everything. not tonight. you can set it down.",
+      "you've done enough for today. you don't need permission — but here it is anyway."
     ],
-    exhaustion:[
-      "if being around people drained you, that makes sense; you give a lot.",
-      "you're not antisocial; you're selective with your energy, and that's wisdom.",
+    exhaustion: [
+      "if being around people drained you, that makes sense. you give a lot.",
+      "you're not antisocial. you're selective with your energy, and that's wisdom.",
       "it's okay to need silence after conversations while your nervous system recalibrates.",
-      "you don't owe anyone more versions of yourself tonight; you can just be one.",
-      "if small talk wore you out, you're not strange; you're thoughtful.",
-      "you don't need to replay what you said today; you can let it fade gently.",
+      "you don't owe anyone more versions of yourself tonight. you can just be one.",
+      "if small talk wore you out, you're not strange. you're thoughtful.",
+      "you don't need to replay what you said today. let it fade gently.",
       "being social takes courage, and resting afterward is part of that courage.",
-      "you don't have to be 'on' anymore; you can power down safely here.",
+      "you don't have to be 'on' anymore. you can power down safely here.",
       "if your energy feels borrowed, it's time to give it back to yourself.",
-      "quiet isn't loneliness; sometimes it's recovery."
+      "quiet isn't loneliness. sometimes it's recovery."
     ],
-    "self-doubt":[
-      "you don't need to be louder to matter; your presence already counts.",
-      "there's no single timeline for becoming yourself; you're not behind.",
-      "you don't need to prove your worth today; it's already there.",
-      "your quietness isn't a weakness; it's where your strength hides.",
+    "self-doubt": [
+      "you don't need to be louder to matter. your presence already counts.",
+      "there's no single timeline for becoming yourself. you're not behind.",
+      "you don't need to prove your worth today. it's already there.",
+      "your quietness isn't a weakness. it's where your strength hides.",
       "stop comparing your interior to someone else's highlight reel.",
-      "small steps are still movement, so keep going gently.",
+      "small steps are still movement. keep going gently.",
       "you are allowed to be a work in progress and still be whole.",
-      "the voice in your head isn't always telling the truth, be kind to it anyway.",
-      "you have survived 100 percent of your bad days; look how far you've come.",
-      "you don't need to be perfect to be lovable; just be here."
+      "the voice in your head isn't always telling the truth. be kind to it anyway.",
+      "you have survived 100% of your bad days. look how far you've come.",
+      "you don't need to be perfect to be lovable. just be here."
     ],
-    growth:[
-      "listen to what your silence is trying to tell you; it knows the way.",
+    growth: [
+      "listen to what your silence is trying to tell you. it knows the way.",
       "what if you stopped fighting yourself and just started listening?",
-      "you are growing even when you can't feel it, like a forest at night.",
-      "your sensitivity is a gift; don't let the world make you hard.",
+      "you are growing even when you can't feel it — like a forest at night.",
+      "your sensitivity is a gift. don't let the world make you hard.",
       "finding yourself often starts with admitting you're lost.",
       "softness is a form of courage in a world this loud.",
       "give yourself the same grace you give everyone else.",
-      "your heart knows the answer; just get quiet enough to hear it.",
-      "change isn't always a loud explosion; sometimes it's a slow thaw.",
-      "you are the sky; the thoughts are just clouds, so let them pass."
+      "your heart knows the answer. just get quiet enough to hear it.",
+      "change isn't always a loud explosion. sometimes it's a slow thaw.",
+      "you are the sky. the thoughts are just clouds — let them pass."
     ],
-    rest:[
-      "you're allowed to stop trying for the day; nothing bad will happen.",
-      "you don't need to earn rest; it's not a reward, it's a need.",
+    rest: [
+      "you're allowed to stop trying for the day. nothing bad will happen.",
+      "you don't need to earn rest. it's not a reward, it's a need.",
       "productive rest is doing absolutely nothing without guilt.",
-      "the to-do list will be there tomorrow; your peace won't wait.",
-      "rest is not giving up; it's refueling quietly.",
-      "close your eyes and let the day dissolve; you did enough.",
+      "the to-do list will be there tomorrow. your peace won't wait.",
+      "rest is not giving up. it's refueling quietly.",
+      "close your eyes and let the day dissolve. you did enough.",
       "sometimes the most productive thing you can do is nap.",
       "your value isn't measured by how much you finished today.",
       "give your mind a place to land and sink into the quiet.",
-      "sleep well; you are safe, and i'll see you tomorrow."
+      "sleep well. you are safe, and i'll see you tomorrow."
     ]
   };
 
-  function addLine(txt){
-    log.insertAdjacentHTML('beforeend',`<span>${txt}<br><br></span>`);
-    log.scrollTop=log.scrollHeight;
+  function addLine(txt, cls = '') {
+    const span = document.createElement('span');
+    if (cls) span.className = cls;
+    span.textContent = txt;
+    log.appendChild(span);
+    log.scrollTop = log.scrollHeight;
   }
 
-  function doKind(cat){addLine(randomPick(scripts[cat]));}
-  function doBreathe(){
-    const steps=["inhale...","hold...","exhale..."];
-    let idx=0;
-    addLine("🌬️ breathe starts...");
-    const tick=setInterval(()=>{
-      addLine(steps[idx%3]);
+  function doKind(cat) { addLine(randomPick(scripts[cat])); }
+
+  let breatheActive = false;
+  function doBreathe() {
+    if (breatheActive) return;
+    breatheActive = true;
+    const steps = ["inhale... 🫁", "hold... ✨", "exhale... 🌬️"];
+    let idx = 0;
+    addLine("starting breathe cycle — follow along...");
+    const tick = setInterval(() => {
+      addLine(steps[idx % 3]);
       idx++;
-      if(idx>=9){clearInterval(tick);addLine("all done. exhale complete—feel lighter? ✨");}
-    },4000);
+      if (idx >= 9) {
+        clearInterval(tick);
+        addLine("all done. feel lighter? you did great. ✨");
+        breatheActive = false;
+      }
+    }, 4000);
   }
-  function togglePlay(){
-    const p=document.getElementById('player');
-    p.volume=.35;
-    p.paused?p.play():p.pause();
+
+  function togglePlay() {
+    const p = document.getElementById('player');
+    p.volume = 0.35;
+    if (p.paused) {
+      p.play();
+      lofiBtn.classList.add('playing');
+      lofiBtn.textContent = '🎵 playing...';
+    } else {
+      p.pause();
+      lofiBtn.classList.remove('playing');
+      lofiBtn.textContent = '🎵 lofi';
+    }
   }
-  function randomPick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+  const messages = ["✨", "hi there 👋", "you're doing great.", "☕", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."];
+
+  // Silent idle blink — just eyes, no log message
+  function idleBlink() {
+    const eyeL = document.getElementById('eyeL');
+    const eyeR = document.getElementById('eyeR');
+    eyeL.setAttribute('r', '0.5');
+    eyeR.setAttribute('r', '0.5');
+    setTimeout(() => {
+      eyeL.setAttribute('r', '5');
+      eyeR.setAttribute('r', '5');
+    }, 150);
+  }
+
+  // Click blink — eyes + a log message
+  function blink() {
+    const eyeL = document.getElementById('eyeL');
+    const eyeR = document.getElementById('eyeR');
+    eyeL.setAttribute('r', '0.5');
+    eyeR.setAttribute('r', '0.5');
+    setTimeout(() => {
+      eyeL.setAttribute('r', '5');
+      eyeR.setAttribute('r', '5');
+      addLine(randomPick(messages));
+    }, 150);
+  }
+
+  function randomBlink() {
+    idleBlink();
+    setTimeout(randomBlink, 5000 + Math.random() * 8000);
+  }
+  setTimeout(randomBlink, 4000 + Math.random() * 4000);
+
+  function randomPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 </script>
 </body>
 </html>
