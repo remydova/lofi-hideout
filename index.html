@@ -27,8 +27,6 @@
       --btn-text: #0c0c18;
       --btn-hover: #9bcca8;
       --log-bg: rgba(0,0,0,0.45);
-      --breathe-teal: rgba(127,181,160,0.35);
-      --breathe-amber: rgba(212,149,106,0.45);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; font-family: "VT323", monospace; }
@@ -38,10 +36,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      min-height: 100dvh;
+      min-height: 100vh;
       position: relative;
-      transition: background 4s ease;
     }
 
     /* Rain overlay */
@@ -83,59 +79,10 @@
       box-shadow: 0 0 30px var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
       animation: fadeIn 1.2s ease both;
-      transition: background 4s ease;
-      overflow: hidden;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Breathing Circle - more responsive */
-    #breatheCircle {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: min(80vmin, 280px);
-      height: min(80vmin, 280px);
-      border-radius: 50%;
-      background: var(--breathe-teal);
-      border: 5px solid var(--accent);
-      box-shadow: 0 0 40px rgba(212,149,106,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--warm);
-      font-size: clamp(1.6em, 7vw, 2.4em);
-      font-weight: bold;
-      text-shadow: 0 0 15px rgba(0,0,0,0.7);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 2;
-      transition: opacity 0.8s ease, transform 4s ease-in-out;
-      cursor: pointer;
-    }
-    #breatheCircle.active {
-      opacity: 1;
-      pointer-events: auto;
-      animation: pulseBreathe 8s infinite ease-in-out;
-    }
-    #breatheCircle::after {
-      content: "tap to stop";
-      position: absolute;
-      bottom: -30px;
-      font-size: 0.8em;
-      color: var(--muted);
-      opacity: 0.7;
-    }
-    @keyframes pulseBreathe {
-      0%   { transform: translate(-50%, -50%) scale(0.7); background: var(--breathe-teal); }
-      25%  { transform: translate(-50%, -50%) scale(1.1); background: var(--breathe-amber); }
-      50%  { transform: translate(-50%, -50%) scale(1.3); background: var(--breathe-teal); }
-      75%  { transform: translate(-50%, -50%) scale(1.1); background: var(--breathe-amber); }
-      100% { transform: translate(-50%, -50%) scale(0.7); background: var(--breathe-teal); }
-    }
-
-    /* Existing styles for mascot, headings, buttons, log, footer */
-    #mascotWrap { height: 150px; position: relative; margin: 0 auto 14px; }
+    #mascotWrap { height: 120px; position: relative; margin: 0 auto 14px; }
     #ball { width: 80px; height: 80px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: float 4s ease-in-out infinite; cursor: pointer; }
     #ball svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #b5c7f2aa); transition: filter 0.3s; }
     #ball:hover svg { filter: drop-shadow(0 0 18px #b5c7f2ee); }
@@ -143,7 +90,7 @@
     h1 { font-size: clamp(2.4em, 8vw, 3em); margin-bottom: 4px; color: var(--accent); text-transform: lowercase; letter-spacing: 2px; line-height: 1; text-shadow: 0 0 20px rgba(212,149,106,0.4); }
     h2 { font-family: "Space Mono", monospace; font-style: italic; font-size: clamp(0.75em, 3vw, 0.88em); font-weight: 400; margin-bottom: 22px; color: var(--muted); letter-spacing: 0.5px; }
     .divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto 22px; opacity: 0.4; }
-    .btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 6px; }
+    .btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 12px; }
     button {
       background: var(--btn-bg);
       color: var(--btn-text);
@@ -166,7 +113,19 @@
     button.lofi-btn.playing { background: rgba(212,149,106,0.3); animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(212,149,106,0.3); } 50% { box-shadow: 0 0 32px rgba(212,149,106,0.55); } }
     .sub { font-size: 0.75em; color: var(--muted); margin-bottom: 14px; font-family: "Space Mono", monospace; opacity: 0.6; }
-    #log { height: 140px; overflow-y: auto; background: var(--log-bg); border: 1px solid rgba(127,181,160,0.1); border-radius: 8px; padding: 12px 14px; margin-top: 18px; font-size: 1.05em; line-height: 1.5; text-transform: lowercase; scroll-behavior: smooth; }
+    #log {
+      height: 140px;
+      overflow-y: auto;
+      background: var(--log-bg);
+      border: 1px solid rgba(127,181,160,0.1);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 18px;
+      font-size: 1.05em;
+      line-height: 1.5;
+      text-transform: lowercase;
+      scroll-behavior: smooth;
+    }
     #log::-webkit-scrollbar { width: 3px; }
     #log::-webkit-scrollbar-track { background: transparent; }
     #log::-webkit-scrollbar-thumb { background: rgba(127,181,160,0.2); border-radius: 2px; }
@@ -181,11 +140,6 @@
 <body>
 
   <div class="rain" id="rain"></div>
-
-  <!-- Breathing Circle -->
-  <div id="breatheCircle">
-    <span id="breatheText"></span>
-  </div>
 
   <div id="wrap">
     <div id="mascotWrap">
@@ -202,7 +156,7 @@
     <h2>it's okay to be you.</h2>
     <div class="divider"></div>
     <button class="breathe-btn" onclick="doBreathe()">breathe 🌬️</button>
-    <p class="sub">press to begin a breathing cycle</p>
+    <p class="sub">press to begin a breathing cycle (tap button again to stop)</p>
     <div class="btn-group">
       <button onclick="doKind('overwhelm')">overwhelm</button>
       <button onclick="doKind('exhaustion')">exhaustion</button>
@@ -227,10 +181,8 @@
   <script>
     const log = document.getElementById('log');
     const lofiBtn = document.getElementById('lofiBtn');
-    const breatheCircle = document.getElementById('breatheCircle');
-    const breatheText = document.getElementById('breatheText');
 
-    // Affirmations in log (no carousel)
+    // Affirmations
     const scripts = {
       overwhelm: [
         "hey, it's okay if everything feels like too much.",
@@ -269,80 +221,53 @@
       ]
     };
 
-    function addLine(txt, cls = '') {
+    function addLine(txt) {
       const span = document.createElement('span');
-      if (cls) span.className = cls;
       span.textContent = txt;
       log.appendChild(span);
       log.scrollTop = log.scrollHeight;
     }
 
     function doKind(cat) {
-      if (scripts[cat] && scripts[cat].length > 0) {
-        const randomMsg = scripts[cat][Math.floor(Math.random() * scripts[cat].length)];
-        addLine(randomMsg);
+      const msgs = scripts[cat];
+      if (msgs && msgs.length > 0) {
+        addLine(msgs[Math.floor(Math.random() * msgs.length)]);
       } else {
         addLine("feeling something... it's okay.");
       }
     }
 
-    // Breathing logic
+    // Breathing (text in log only)
     let breatheActive = false;
-    let breatheTimeout = null;
+    let breatheInterval;
 
     function doBreathe() {
-      if (breatheActive) return;
-      breatheActive = true;
-
-      breatheCircle.classList.add('active');
-      document.body.style.background = 'rgba(12,12,24,0.92)';
-
-      const steps = [
-        { text: "inhale... 💨" },
-        { text: "hold... ✨" },
-        { text: "exhale... 🌬️" }
-      ];
-      let stepIdx = 0;
-      let cycleCount = 0;
-
-      addLine("starting breathe cycle — tap circle to stop");
-
-      function nextStep() {
-        if (!breatheActive) return;
-
-        const current = steps[stepIdx % 3];
-        breatheText.textContent = current.text;
-
-        breatheTimeout = setTimeout(() => {
-          stepIdx++;
-          if (stepIdx % 3 === 0) cycleCount++;
-
-          if (cycleCount >= 3 || !breatheActive) {
-            endCycle();
-            return;
-          }
-          nextStep();
-        }, 4000);
-      }
-
-      nextStep();
-    }
-
-    function endCycle() {
-      clearTimeout(breatheTimeout);
-      breatheCircle.classList.remove('active');
-      breatheText.textContent = "";
-      document.body.style.background = 'var(--bg)';
-      addLine("all done. feel lighter? you did great. ✨");
-      breatheActive = false;
-    }
-
-    breatheCircle.addEventListener('click', () => {
       if (breatheActive) {
-        endCycle();
+        // Stop if already running
+        clearInterval(breatheInterval);
         addLine("cycle paused. take your time. ☕");
+        breatheActive = false;
+        return;
       }
-    });
+
+      breatheActive = true;
+      const steps = ["inhale... 💨", "hold... ✨", "exhale... 🌬️"];
+      let idx = 0;
+      let cycle = 0;
+
+      addLine("starting breathe cycle — 3 rounds. tap button again to stop");
+
+      breatheInterval = setInterval(() => {
+        addLine(steps[idx]);
+        idx = (idx + 1) % 3;
+        if (idx === 0) cycle++;
+        if (cycle >= 3) {
+          clearInterval(breatheInterval);
+          addLine("all done. feel lighter? you did great. ✨");
+          breatheActive = false;
+        }
+      }, 4000);
+    }
 
     // Rain generation
     function makeRain() {
@@ -376,10 +301,35 @@
       }
     }
 
-    // Mascot blink (placeholder - add your full version)
-    function blink() {
-      addLine("✨");
+    // Mascot blink
+    function idleBlink() {
+      const eyeL = document.getElementById('eyeL');
+      const eyeR = document.getElementById('eyeR');
+      eyeL.setAttribute('r', '0.5');
+      eyeR.setAttribute('r', '0.5');
+      setTimeout(() => {
+        eyeL.setAttribute('r', '5');
+        eyeR.setAttribute('r', '5');
+      }, 150);
     }
+
+    function blink() {
+      const eyeL = document.getElementById('eyeL');
+      const eyeR = document.getElementById('eyeR');
+      eyeL.setAttribute('r', '0.5');
+      eyeR.setAttribute('r', '0.5');
+      setTimeout(() => {
+        eyeL.setAttribute('r', '5');
+        eyeR.setAttribute('r', '5');
+        addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "☕", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
+      }, 150);
+    }
+
+    function randomBlink() {
+      idleBlink();
+      setTimeout(randomBlink, 5000 + Math.random() * 8000);
+    }
+    setTimeout(randomBlink, 4000 + Math.random() * 4000);
   </script>
 </body>
 </html>
