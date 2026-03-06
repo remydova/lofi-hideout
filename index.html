@@ -78,23 +78,26 @@
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: 16px;
-      padding: 34px 30px 80px; /* extra bottom space for carousel */
+      padding: 34px 30px 100px;
       text-align: center;
       box-shadow: 0 0 30px var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
       animation: fadeIn 1.2s ease both;
       transition: background 4s ease;
+      overflow: hidden;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Breathing Circle */
+    /* Breathing Circle - responsive size */
     #breatheCircle {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      width: 320px;
-      height: 320px;
+      width: 80vmin;
+      height: 80vmin;
+      max-width: 320px;
+      max-height: 320px;
       border-radius: 50%;
       background: var(--breathe-teal);
       border: 5px solid var(--accent);
@@ -103,7 +106,7 @@
       align-items: center;
       justify-content: center;
       color: var(--warm);
-      font-size: 2.8em;
+      font-size: clamp(1.8em, 8vw, 2.8em);
       font-weight: bold;
       text-shadow: 0 0 20px rgba(0,0,0,0.7);
       opacity: 0;
@@ -116,6 +119,13 @@
       opacity: 1;
       pointer-events: auto;
       animation: pulseBreathe 8s infinite ease-in-out;
+    }
+    #breatheCircle.stop-hint {
+      font-size: 0.8em;
+      position: absolute;
+      bottom: 20px;
+      color: var(--muted);
+      opacity: 0.7;
     }
     @keyframes pulseBreathe {
       0%   { transform: translate(-50%, -50%) scale(0.7); background: var(--breathe-teal); }
@@ -138,6 +148,7 @@
       letter-spacing: 0.5px;
     }
     #affirmations.visible { opacity: 1; }
+    #affirmations.hidden { opacity: 0 !important; }
     #affirmationText {
       opacity: 0;
       transform: translateY(10px);
@@ -148,7 +159,7 @@
       transform: translateY(0);
     }
 
-    /* Existing styles for mascot, headings, buttons, log, footer */
+    /* Existing styles (mascot, headings, buttons, log, footer) */
     #mascotWrap { height: 150px; position: relative; margin: 0 auto 14px; }
     #ball { width: 80px; height: 80px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: float 4s ease-in-out infinite; cursor: pointer; }
     #ball svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #b5c7f2aa); transition: filter 0.3s; }
@@ -187,6 +198,7 @@
   <!-- Breathing Circle -->
   <div id="breatheCircle">
     <span id="breatheText"></span>
+    <span class="stop-hint">tap to stop</span>
   </div>
 
   <div id="wrap">
@@ -206,11 +218,11 @@
     <button class="breathe-btn" onclick="doBreathe()">breathe 🌬️</button>
     <p class="sub">press to begin a breathing cycle</p>
     <div class="btn-group">
-      <button onclick="doKind('overwhelm')">overwhelm</button>
-      <button onclick="doKind('exhaustion')">exhaustion</button>
-      <button onclick="doKind('self-doubt')">self-doubt</button>
-      <button onclick="doKind('growth')">growth</button>
-      <button onclick="doKind('rest')">rest</button>
+      <button class="quote-btn" onclick="doKind('overwhelm')">overwhelm</button>
+      <button class="quote-btn" onclick="doKind('exhaustion')">exhaustion</button>
+      <button class="quote-btn" onclick="doKind('self-doubt')">self-doubt</button>
+      <button class="quote-btn" onclick="doKind('growth')">growth</button>
+      <button class="quote-btn" onclick="doKind('rest')">rest</button>
       <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
     </div>
     <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
@@ -239,7 +251,7 @@
     const affirmationsDiv = document.getElementById('affirmations');
     const affirmationText = document.getElementById('affirmationText');
 
-    // Affirmations array (Remy voice)
+    // Affirmations array
     const affirmations = [
       "it's okay to pause. nothing has to be fixed right now.",
       "you're allowed to rest without earning it.",
@@ -262,7 +274,7 @@
       if (carouselInterval || !hasInteracted) return;
       affirmationsDiv.classList.add('visible');
       showNextAffirmation();
-      carouselInterval = setInterval(showNextAffirmation, 15000); // change every 15s
+      carouselInterval = setInterval(showNextAffirmation, 15000);
     }
 
     function showNextAffirmation() {
@@ -271,10 +283,9 @@
         affirmationText.textContent = affirmations[currentAffirmationIndex];
         affirmationText.classList.add('fade-in');
         currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
-      }, 800); // fade out time
+      }, 800);
     }
 
-    // Trigger carousel after first interaction
     function markInteraction() {
       hasInteracted = true;
       startAffirmationsCarousel();
@@ -282,33 +293,30 @@
 
     // Hook interactions
     document.querySelector('.breathe-btn').addEventListener('click', markInteraction);
-    document.querySelectorAll('.btn-group button:not(.breathe-btn)').forEach(btn => {
-      btn.addEventListener('click', markInteraction);
-    });
+    document.querySelectorAll('.quote-btn').forEach(btn => btn.addEventListener('click', markInteraction));
     lofiBtn.addEventListener('click', markInteraction);
 
-    // Your other functions (doBreathe, doKind, togglePlay, blink, randomBlink, makeRain, etc.) go here unchanged
-
-    // Breathing logic (from previous)
+    // Breathing logic
     let breatheActive = false;
 
     function doBreathe() {
       if (breatheActive) return;
       breatheActive = true;
-      markInteraction(); // trigger carousel
+      markInteraction();
+      affirmationsDiv.classList.add('hidden'); // pause carousel during breathing
 
       breatheCircle.classList.add('active');
       document.body.style.background = 'rgba(12,12,24,0.92)';
 
       const steps = [
-        { text: "inhale... 🫁" },
+        { text: "inhale... 💨" },
         { text: "hold... ✨" },
         { text: "exhale... 🌬️" }
       ];
       let stepIdx = 0;
       let cycleCount = 0;
 
-      addLine("starting breathe cycle — follow the circle...");
+      addLine("starting breathe cycle — follow the circle... (tap to stop)");
 
       function nextStep() {
         if (!breatheActive) return;
@@ -335,6 +343,7 @@
       breatheCircle.classList.remove('active');
       breatheText.textContent = "";
       document.body.style.background = 'var(--bg)';
+      affirmationsDiv.classList.remove('hidden'); // resume carousel
       addLine("all done. feel lighter? you did great. ✨");
       breatheActive = false;
     }
@@ -346,7 +355,7 @@
       }
     });
 
-    // Rain
+    // Rain generation
     function makeRain() {
       const rain = document.getElementById('rain');
       rain.innerHTML = '';
@@ -363,9 +372,42 @@
     }
     window.addEventListener('load', makeRain);
 
-    // Your togglePlay, blink, randomBlink, randomPick, doKind, scripts object here...
-    // (add them from your working version if not already included)
+    // togglePlay (music)
+    function togglePlay() {
+      const p = document.getElementById('player');
+      p.volume = 0.35;
+      if (p.paused) {
+        p.play();
+        lofiBtn.classList.add('playing');
+        lofiBtn.textContent = '🎵 playing...';
+      } else {
+        p.pause();
+        lofiBtn.classList.remove('playing');
+        lofiBtn.textContent = '🎵 lofi';
+      }
+    }
 
+    // Placeholder for doKind, blink, etc. (add your full versions)
+    const scripts = {
+      overwhelm: ["hey, it's okay if everything feels like too much." /* add full list */],
+      exhaustion: [/* ... */],
+      "self-doubt": [/* ... */],
+      growth: [/* ... */],
+      rest: [/* ... */]
+    };
+
+    function doKind(cat) {
+      if (scripts[cat]) {
+        addLine(randomPick(scripts[cat]));
+      } else {
+        addLine("feeling something... it's okay.");
+      }
+      markInteraction();
+    }
+
+    function randomPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    // Add your blink/randomBlink if needed
   </script>
 </body>
 </html>
