@@ -78,12 +78,13 @@
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: 16px;
-      padding: 34px 30px 80px; /* extra bottom space for carousel */
+      padding: 34px 30px 100px; /* extra bottom for Miso + carousel */
       text-align: center;
       box-shadow: 0 0 30px var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
       animation: fadeIn 1.2s ease both;
       transition: background 4s ease;
+      overflow: hidden;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -123,6 +124,26 @@
       50%  { transform: translate(-50%, -50%) scale(1.3); background: var(--breathe-teal); }
       75%  { transform: translate(-50%, -50%) scale(1.1); background: var(--breathe-amber); }
       100% { transform: translate(-50%, -50%) scale(0.7); background: var(--breathe-teal); }
+    }
+
+    /* Miso Cat SVG */
+    #miso {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 80px;
+      opacity: 0.8;
+      cursor: pointer;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+    #miso:hover { opacity: 1; }
+    #miso .eye { animation: blink 10s infinite; }
+    @keyframes blink {
+      0%, 90% { transform: scaleY(1); }
+      92% { transform: scaleY(0.1); }
+      94%, 100% { transform: scaleY(1); }
     }
 
     /* Affirmations Carousel */
@@ -189,6 +210,33 @@
     <span id="breatheText"></span>
   </div>
 
+  <!-- Miso Cat -->
+  <div id="miso" onclick="misoInteract()" title="miso is watching... 🐾">
+    <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body (round tabby) -->
+      <ellipse cx="100" cy="100" rx="80" ry="60" fill="#a8a8a8" stroke="#8c8c8c" stroke-width="4"/>
+      <!-- Orange stripes -->
+      <path d="M60 80 Q80 60 100 80 Q120 100 140 80" fill="none" stroke="#ffaa66" stroke-width="12" opacity="0.6"/>
+      <path d="M50 110 Q70 90 90 110" fill="none" stroke="#ffaa66" stroke-width="10" opacity="0.5"/>
+      <!-- Head -->
+      <circle cx="100" cy="60" r="40" fill="#a8a8a8" stroke="#8c8c8c" stroke-width="4"/>
+      <!-- Ears -->
+      <polygon points="70,30 85,10 100,35" fill="#a8a8a8" stroke="#8c8c8c" stroke-width="3"/>
+      <polygon points="130,35 115,10 100,30" fill="#a8a8a8" stroke="#8c8c8c" stroke-width="3"/>
+      <!-- Eyes (sleepy half-closed) -->
+      <ellipse cx="85" cy="55" rx="12" ry="8" fill="white"/>
+      <ellipse cx="115" cy="55" rx="12" ry="8" fill="white"/>
+      <ellipse cx="85" cy="55" rx="8" ry="4" fill="#6e4b3f" class="eye"/>
+      <ellipse cx="115" cy="55" rx="8" ry="4" fill="#6e4b3f" class="eye"/>
+      <!-- Nose -->
+      <circle cx="100" cy="65" r="5" fill="#ff99aa"/>
+      <!-- Mouth (small sleepy smile) -->
+      <path d="M90 75 Q100 85 110 75" fill="none" stroke="#6e4b3f" stroke-width="4" stroke-linecap="round"/>
+      <!-- Tail (curled) -->
+      <path d="M140 100 Q160 80 170 100 Q160 120 140 110" fill="none" stroke="#a8a8a8" stroke-width="20" stroke-linecap="round"/>
+    </svg>
+  </div>
+
   <div id="wrap">
     <div id="mascotWrap">
       <div id="ball" onclick="blink()" title="click me ✨">
@@ -238,8 +286,9 @@
     const breatheText = document.getElementById('breatheText');
     const affirmationsDiv = document.getElementById('affirmations');
     const affirmationText = document.getElementById('affirmationText');
+    const miso = document.getElementById('miso');
 
-    // Affirmations array (Remy voice)
+    // Affirmations array
     const affirmations = [
       "it's okay to pause. nothing has to be fixed right now.",
       "you're allowed to rest without earning it.",
@@ -262,7 +311,7 @@
       if (carouselInterval || !hasInteracted) return;
       affirmationsDiv.classList.add('visible');
       showNextAffirmation();
-      carouselInterval = setInterval(showNextAffirmation, 15000); // change every 15s
+      carouselInterval = setInterval(showNextAffirmation, 15000);
     }
 
     function showNextAffirmation() {
@@ -271,10 +320,9 @@
         affirmationText.textContent = affirmations[currentAffirmationIndex];
         affirmationText.classList.add('fade-in');
         currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
-      }, 800); // fade out time
+      }, 800);
     }
 
-    // Trigger carousel after first interaction
     function markInteraction() {
       hasInteracted = true;
       startAffirmationsCarousel();
@@ -282,26 +330,27 @@
 
     // Hook interactions
     document.querySelector('.breathe-btn').addEventListener('click', markInteraction);
-    document.querySelectorAll('.btn-group button:not(.breathe-btn)').forEach(btn => {
-      btn.addEventListener('click', markInteraction);
-    });
+    document.querySelectorAll('.btn-group button:not(.breathe-btn)').forEach(btn => btn.addEventListener('click', markInteraction));
     lofiBtn.addEventListener('click', markInteraction);
 
-    // Your other functions (doBreathe, doKind, togglePlay, blink, randomBlink, makeRain, etc.) go here unchanged
+    // Miso interaction
+    function misoInteract() {
+      addLine("miso says: purr... it's okay to rest. 🐾");
+    }
 
-    // Breathing logic (from previous)
+    // Breathing logic
     let breatheActive = false;
 
     function doBreathe() {
       if (breatheActive) return;
       breatheActive = true;
-      markInteraction(); // trigger carousel
+      markInteraction();
 
       breatheCircle.classList.add('active');
       document.body.style.background = 'rgba(12,12,24,0.92)';
 
       const steps = [
-        { text: "inhale... 🫁" },
+        { text: "inhale... 💨" },
         { text: "hold... ✨" },
         { text: "exhale... 🌬️" }
       ];
@@ -346,7 +395,7 @@
       }
     });
 
-    // Rain
+    // Rain generation
     function makeRain() {
       const rain = document.getElementById('rain');
       rain.innerHTML = '';
@@ -363,9 +412,45 @@
     }
     window.addEventListener('load', makeRain);
 
-    // Your togglePlay, blink, randomBlink, randomPick, doKind, scripts object here...
-    // (add them from your working version if not already included)
+    // Your other functions: togglePlay, blink, randomBlink, doKind, scripts, randomPick...
+    // (Add your full versions here)
 
+    function togglePlay() {
+      const p = document.getElementById('player');
+      p.volume = 0.35;
+      if (p.paused) {
+        p.play();
+        lofiBtn.classList.add('playing');
+        lofiBtn.textContent = '🎵 playing...';
+      } else {
+        p.pause();
+        lofiBtn.classList.remove('playing');
+        lofiBtn.textContent = '🎵 lofi';
+      }
+    }
+
+    // Blink functions (example placeholder - add your real ones)
+    function blink() {
+      // your blink code
+      addLine(randomPick(["✨", "miso is napping... 😴"]));
+    }
+
+    function randomBlink() {
+      // your random blink
+      setTimeout(randomBlink, 5000 + Math.random() * 8000);
+    }
+    setTimeout(randomBlink, 4000 + Math.random() * 4000);
+
+    // doKind and scripts (add your full affirmations)
+    const scripts = {
+      overwhelm: ["hey, it's okay if everything feels like too much.", /* ... your full list */ ],
+      // etc.
+    };
+    function doKind(cat) {
+      addLine(randomPick(scripts[cat]));
+      markInteraction();
+    }
+    function randomPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   </script>
 </body>
 </html>
