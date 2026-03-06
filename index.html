@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital@0;1&family=Caveat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0c0c18;
@@ -78,7 +78,7 @@
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: 16px;
-      padding: 34px 30px 100px;
+      padding: 34px 30px 60px;
       text-align: center;
       box-shadow: 0 0 30px var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
@@ -88,27 +88,25 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Breathing Circle - responsive size */
+    /* Breathing Circle - more responsive */
     #breatheCircle {
       position: absolute;
-      top: 50%;
+      top: 45%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      width: 80vmin;
-      height: 80vmin;
-      max-width: 320px;
-      max-height: 320px;
+      width: min(80vmin, 280px);
+      height: min(80vmin, 280px);
       border-radius: 50%;
       background: var(--breathe-teal);
       border: 5px solid var(--accent);
-      box-shadow: 0 0 50px rgba(212,149,106,0.6);
+      box-shadow: 0 0 40px rgba(212,149,106,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--warm);
-      font-size: clamp(1.8em, 8vw, 2.8em);
+      font-size: clamp(1.6em, 7vw, 2.4em);
       font-weight: bold;
-      text-shadow: 0 0 20px rgba(0,0,0,0.7);
+      text-shadow: 0 0 15px rgba(0,0,0,0.7);
       opacity: 0;
       pointer-events: none;
       z-index: 2;
@@ -120,10 +118,11 @@
       pointer-events: auto;
       animation: pulseBreathe 8s infinite ease-in-out;
     }
-    #breatheCircle.stop-hint {
-      font-size: 0.8em;
+    #breatheCircle::after {
+      content: "tap to stop";
       position: absolute;
-      bottom: 20px;
+      bottom: -30px;
+      font-size: 0.8em;
       color: var(--muted);
       opacity: 0.7;
     }
@@ -135,31 +134,7 @@
       100% { transform: translate(-50%, -50%) scale(0.7); background: var(--breathe-teal); }
     }
 
-    /* Affirmations Carousel */
-    #affirmations {
-      margin-top: 20px;
-      min-height: 60px;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-      font-family: "Caveat", cursive;
-      font-size: 1.4em;
-      color: var(--accent);
-      text-shadow: 0 0 10px rgba(212,149,106,0.4);
-      letter-spacing: 0.5px;
-    }
-    #affirmations.visible { opacity: 1; }
-    #affirmations.hidden { opacity: 0 !important; }
-    #affirmationText {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 1.2s ease, transform 1.2s ease;
-    }
-    #affirmationText.fade-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Existing styles (mascot, headings, buttons, log, footer) */
+    /* Existing styles for mascot, headings, buttons, log, footer */
     #mascotWrap { height: 150px; position: relative; margin: 0 auto 14px; }
     #ball { width: 80px; height: 80px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: float 4s ease-in-out infinite; cursor: pointer; }
     #ball svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #b5c7f2aa); transition: filter 0.3s; }
@@ -169,7 +144,19 @@
     h2 { font-family: "Space Mono", monospace; font-style: italic; font-size: clamp(0.75em, 3vw, 0.88em); font-weight: 400; margin-bottom: 22px; color: var(--muted); letter-spacing: 0.5px; }
     .divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto 22px; opacity: 0.4; }
     .btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 6px; }
-    button { background: var(--btn-bg); color: var(--btn-text); border: none; padding: 9px 16px; font-size: 1.05em; font-family: "VT323", monospace; border-radius: 8px; cursor: pointer; transition: transform 0.15s, background 0.15s, box-shadow 0.15s; text-transform: lowercase; letter-spacing: 0.5px; }
+    button {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 9px 16px;
+      font-size: 1.05em;
+      font-family: "VT323", monospace;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+      text-transform: lowercase;
+      letter-spacing: 0.5px;
+    }
     button:hover { transform: scale(1.06) translateY(-1px); background: var(--btn-hover); box-shadow: 0 4px 16px rgba(127,181,160,0.25); }
     button:active { transform: scale(0.97); }
     button.breathe-btn { background: rgba(127,181,160,0.15); color: var(--border); border: 1px solid rgba(127,181,160,0.3); font-size: 1.2em; padding: 10px 22px; width: 100%; margin-bottom: 4px; }
@@ -179,7 +166,7 @@
     button.lofi-btn.playing { background: rgba(212,149,106,0.3); animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(212,149,106,0.3); } 50% { box-shadow: 0 0 32px rgba(212,149,106,0.55); } }
     .sub { font-size: 0.75em; color: var(--muted); margin-bottom: 14px; font-family: "Space Mono", monospace; opacity: 0.6; }
-    #log { height: 118px; overflow-y: auto; background: var(--log-bg); border: 1px solid rgba(127,181,160,0.1); border-radius: 8px; padding: 12px 14px; margin-top: 18px; font-size: 1.05em; line-height: 1.5; text-transform: lowercase; scroll-behavior: smooth; }
+    #log { height: 140px; overflow-y: auto; background: var(--log-bg); border: 1px solid rgba(127,181,160,0.1); border-radius: 8px; padding: 12px 14px; margin-top: 18px; font-size: 1.05em; line-height: 1.5; text-transform: lowercase; scroll-behavior: smooth; }
     #log::-webkit-scrollbar { width: 3px; }
     #log::-webkit-scrollbar-track { background: transparent; }
     #log::-webkit-scrollbar-thumb { background: rgba(127,181,160,0.2); border-radius: 2px; }
@@ -198,7 +185,6 @@
   <!-- Breathing Circle -->
   <div id="breatheCircle">
     <span id="breatheText"></span>
-    <span class="stop-hint">tap to stop</span>
   </div>
 
   <div id="wrap">
@@ -218,19 +204,14 @@
     <button class="breathe-btn" onclick="doBreathe()">breathe 🌬️</button>
     <p class="sub">press to begin a breathing cycle</p>
     <div class="btn-group">
-      <button class="quote-btn" onclick="doKind('overwhelm')">overwhelm</button>
-      <button class="quote-btn" onclick="doKind('exhaustion')">exhaustion</button>
-      <button class="quote-btn" onclick="doKind('self-doubt')">self-doubt</button>
-      <button class="quote-btn" onclick="doKind('growth')">growth</button>
-      <button class="quote-btn" onclick="doKind('rest')">rest</button>
+      <button onclick="doKind('overwhelm')">overwhelm</button>
+      <button onclick="doKind('exhaustion')">exhaustion</button>
+      <button onclick="doKind('self-doubt')">self-doubt</button>
+      <button onclick="doKind('growth')">growth</button>
+      <button onclick="doKind('rest')">rest</button>
       <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
     </div>
     <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
-
-    <!-- Affirmations Carousel -->
-    <div id="affirmations">
-      <span id="affirmationText"></span>
-    </div>
 
     <div class="footer">
       <p class="credit">a remy dova experience ✦</p>
@@ -248,62 +229,70 @@
     const lofiBtn = document.getElementById('lofiBtn');
     const breatheCircle = document.getElementById('breatheCircle');
     const breatheText = document.getElementById('breatheText');
-    const affirmationsDiv = document.getElementById('affirmations');
-    const affirmationText = document.getElementById('affirmationText');
 
-    // Affirmations array
-    const affirmations = [
-      "it's okay to pause. nothing has to be fixed right now.",
-      "you're allowed to rest without earning it.",
-      "your quiet is not empty — it's full of you.",
-      "you don't have to be loud to matter.",
-      "some days just breathing is enough. today can be one of those.",
-      "you're doing great, even when it doesn't feel like it.",
-      "let the thoughts drift. they don't have to stay.",
-      "you are safe here. you are enough here.",
-      "it's okay to be soft in a loud world.",
-      "take the slow way. there's no hurry."
-    ];
+    // Affirmations in log (no carousel)
+    const scripts = {
+      overwhelm: [
+        "hey, it's okay if everything feels like too much.",
+        "you don't have to fix today — you can just pause.",
+        "the world moves fast, but you're allowed to move slowly.",
+        "your mind feels loud, but you don't need to quiet it.",
+        "being overwhelmed doesn't mean you're broken."
+      ],
+      exhaustion: [
+        "if people drained you, that makes sense.",
+        "you're allowed to need silence after conversations.",
+        "resting afterward is part of courage.",
+        "you don't have to be 'on' anymore.",
+        "quiet isn't loneliness. sometimes it's recovery."
+      ],
+      "self-doubt": [
+        "you don't need to be louder to matter.",
+        "there's no single timeline for becoming yourself.",
+        "your quietness isn't a weakness.",
+        "you have survived 100% of your bad days.",
+        "you don't need to be perfect to be lovable."
+      ],
+      growth: [
+        "you are growing even when you can't feel it.",
+        "your sensitivity is a gift.",
+        "softness is courage in a loud world.",
+        "give yourself the same grace you give others.",
+        "change isn't always loud. sometimes it's a slow thaw."
+      ],
+      rest: [
+        "you're allowed to stop trying for the day.",
+        "you don't need to earn rest.",
+        "the to-do list will be there tomorrow.",
+        "sometimes the most productive thing is nap.",
+        "your value isn't measured by what you finished today."
+      ]
+    };
 
-    // Carousel logic
-    let currentAffirmationIndex = 0;
-    let carouselInterval = null;
-    let hasInteracted = false;
-
-    function startAffirmationsCarousel() {
-      if (carouselInterval || !hasInteracted) return;
-      affirmationsDiv.classList.add('visible');
-      showNextAffirmation();
-      carouselInterval = setInterval(showNextAffirmation, 15000);
+    function addLine(txt, cls = '') {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      span.textContent = txt;
+      log.appendChild(span);
+      log.scrollTop = log.scrollHeight;
     }
 
-    function showNextAffirmation() {
-      affirmationText.classList.remove('fade-in');
-      setTimeout(() => {
-        affirmationText.textContent = affirmations[currentAffirmationIndex];
-        affirmationText.classList.add('fade-in');
-        currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
-      }, 800);
+    function doKind(cat) {
+      if (scripts[cat] && scripts[cat].length > 0) {
+        const randomMsg = scripts[cat][Math.floor(Math.random() * scripts[cat].length)];
+        addLine(randomMsg);
+      } else {
+        addLine("feeling something... it's okay.");
+      }
     }
-
-    function markInteraction() {
-      hasInteracted = true;
-      startAffirmationsCarousel();
-    }
-
-    // Hook interactions
-    document.querySelector('.breathe-btn').addEventListener('click', markInteraction);
-    document.querySelectorAll('.quote-btn').forEach(btn => btn.addEventListener('click', markInteraction));
-    lofiBtn.addEventListener('click', markInteraction);
 
     // Breathing logic
     let breatheActive = false;
+    let breatheTimeout = null;
 
     function doBreathe() {
       if (breatheActive) return;
       breatheActive = true;
-      markInteraction();
-      affirmationsDiv.classList.add('hidden'); // pause carousel during breathing
 
       breatheCircle.classList.add('active');
       document.body.style.background = 'rgba(12,12,24,0.92)';
@@ -316,7 +305,7 @@
       let stepIdx = 0;
       let cycleCount = 0;
 
-      addLine("starting breathe cycle — follow the circle... (tap to stop)");
+      addLine("starting breathe cycle — tap circle to stop");
 
       function nextStep() {
         if (!breatheActive) return;
@@ -324,7 +313,7 @@
         const current = steps[stepIdx % 3];
         breatheText.textContent = current.text;
 
-        setTimeout(() => {
+        breatheTimeout = setTimeout(() => {
           stepIdx++;
           if (stepIdx % 3 === 0) cycleCount++;
 
@@ -340,10 +329,10 @@
     }
 
     function endCycle() {
+      clearTimeout(breatheTimeout);
       breatheCircle.classList.remove('active');
       breatheText.textContent = "";
       document.body.style.background = 'var(--bg)';
-      affirmationsDiv.classList.remove('hidden'); // resume carousel
       addLine("all done. feel lighter? you did great. ✨");
       breatheActive = false;
     }
@@ -372,7 +361,7 @@
     }
     window.addEventListener('load', makeRain);
 
-    // togglePlay (music)
+    // Music toggle
     function togglePlay() {
       const p = document.getElementById('player');
       p.volume = 0.35;
@@ -387,27 +376,10 @@
       }
     }
 
-    // Placeholder for doKind, blink, etc. (add your full versions)
-    const scripts = {
-      overwhelm: ["hey, it's okay if everything feels like too much." /* add full list */],
-      exhaustion: [/* ... */],
-      "self-doubt": [/* ... */],
-      growth: [/* ... */],
-      rest: [/* ... */]
-    };
-
-    function doKind(cat) {
-      if (scripts[cat]) {
-        addLine(randomPick(scripts[cat]));
-      } else {
-        addLine("feeling something... it's okay.");
-      }
-      markInteraction();
+    // Mascot blink (placeholder - add your full version)
+    function blink() {
+      addLine("✨");
     }
-
-    function randomPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-    // Add your blink/randomBlink if needed
   </script>
 </body>
 </html>
