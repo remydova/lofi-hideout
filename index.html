@@ -99,14 +99,13 @@
     #ball:hover svg { filter: drop-shadow(0 0 18px #b5c7f2ee); }
     @keyframes float { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, calc(-50% - 12px)); } }
 
-    /* Lower mascot more noticeably on laptop/desktop screens */
     @media (min-width: 600px) {
       #mascotWrap {
         margin-top: 20px;
         height: 140px;
       }
       #ball {
-        top: 60%; /* Slight downward shift for better balance */
+        top: 60%;
       }
     }
 
@@ -192,8 +191,8 @@
       <button onclick="doKind('rest')">rest</button>
       <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
     </div>
-    <div class="quote-divider">———— quotes ————</div>
-    <div id="log"><span class="welcome">welcome, quiet soul.</span></div>
+    <div class="quote-divider">☕ ———— quotes ————</div>
+    <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
 
     <div class="footer">
       <p class="credit">a remy dova experience ✦</p>
@@ -272,7 +271,7 @@
     function doBreathe() {
       if (breatheActive) {
         clearInterval(breatheInterval);
-        addLine("cycle paused. take your time.");
+        addLine("cycle paused. take your time. ☕");
         breatheActive = false;
         return;
       }
@@ -345,7 +344,7 @@
       setTimeout(() => {
         eyeL.setAttribute('r', '5');
         eyeR.setAttribute('r', '5');
-        addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
+        addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "☕", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
       }, 150);
     }
 
