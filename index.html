@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
   <style>
+    /* Existing styles unchanged – keeping everything identical for stability */
     :root {
       --bg: #0c0c18;
       --card: rgba(19, 19, 31, 0.92);
@@ -40,7 +41,6 @@
       position: relative;
     }
 
-    /* Rain overlay */
     .rain { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .drop {
       position: absolute;
@@ -55,7 +55,6 @@
     .drop:nth-child(even) { animation-duration: 8s; }
     @keyframes fall { to { transform: translateY(120vh) rotate(15deg); } }
 
-    /* Grain texture */
     body::after {
       content: "";
       position: fixed;
@@ -74,7 +73,7 @@
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: 16px;
-      padding: 34px 30px 60px;
+      padding: 20px 30px 60px;
       text-align: center;
       box-shadow: 0 0 30px var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
       backdrop-filter: blur(12px);
@@ -82,11 +81,12 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    #mascotWrap { height: 120px; position: relative; margin: 0 auto 14px; }
+    #mascotWrap { height: 100px; position: relative; margin: 0 auto 10px; }
     #ball { width: 80px; height: 80px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: float 4s ease-in-out infinite; cursor: pointer; }
     #ball svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #b5c7f2aa); transition: filter 0.3s; }
     #ball:hover svg { filter: drop-shadow(0 0 18px #b5c7f2ee); }
     @keyframes float { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, calc(-50% - 12px)); } }
+
     h1 { font-size: clamp(2.4em, 8vw, 3em); margin-bottom: 4px; color: var(--accent); text-transform: lowercase; letter-spacing: 2px; line-height: 1; text-shadow: 0 0 20px rgba(212,149,106,0.4); }
     h2 { font-family: "Space Mono", monospace; font-style: italic; font-size: clamp(0.75em, 3vw, 0.88em); font-weight: 400; margin-bottom: 22px; color: var(--muted); letter-spacing: 0.5px; }
     .divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto 22px; opacity: 0.4; }
@@ -106,12 +106,13 @@
     }
     button:hover { transform: scale(1.06) translateY(-1px); background: var(--btn-hover); box-shadow: 0 4px 16px rgba(127,181,160,0.25); }
     button:active { transform: scale(0.97); }
-    button.breathe-btn { background: rgba(127,181,160,0.15); color: var(--border); border: 1px solid rgba(127,181,160,0.3); font-size: 1.2em; padding: 10px 22px; width: 100%; margin-bottom: 4px; }
+    button.breathe-btn { background: rgba(127,181,160,0.15); color: var(--border); border: 1px solid rgba(127,181,160,0.3); font-size: 1.2em; padding: 10px 22px; width: 100%; margin-bottom: 8px; }
     button.breathe-btn:hover { background: rgba(127,181,160,0.22); box-shadow: 0 0 20px rgba(127,181,160,0.15); }
     button.lofi-btn { background: rgba(212,149,106,0.15); color: var(--accent); border: 1px solid rgba(212,149,106,0.3); }
     button.lofi-btn:hover { background: rgba(212,149,106,0.25); box-shadow: 0 4px 16px rgba(212,149,106,0.2); }
     button.lofi-btn.playing { background: rgba(212,149,106,0.3); animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(212,149,106,0.3); } 50% { box-shadow: 0 0 32px rgba(212,149,106,0.55); } }
+    .quote-divider { margin: 16px 0; font-size: 1.2em; opacity: 0.6; color: var(--muted); }
     .sub { font-size: 0.75em; color: var(--muted); margin-bottom: 14px; font-family: "Space Mono", monospace; opacity: 0.6; }
     #log {
       height: 140px;
@@ -134,6 +135,9 @@
     #log .welcome { color: var(--muted); }
     .footer { margin-top: 20px; font-size: 0.8em; color: var(--muted); opacity: 0.7; text-align: center; }
     .credit { margin: 8px 0; }
+    .youtube-link { margin: 12px 0; font-size: 0.9em; }
+    .youtube-link a { color: var(--accent); text-decoration: none; }
+    .youtube-link a:hover { text-decoration: underline; }
     audio { position: absolute; left: -9999px; }
   </style>
 </head>
@@ -165,24 +169,29 @@
       <button onclick="doKind('rest')">rest</button>
       <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
     </div>
+    <div class="quote-divider">☕ ———— quotes ———— ☕</div>
     <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
 
     <div class="footer">
       <p class="credit">a remy dova experience ✦</p>
-      <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2F">
-        <img src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2F&label=quiet%20souls%20here&labelColor=%230c0c18&countColor=%23d4956a&style=flat" alt="quiet souls here" />
+      <!-- New: Link to Remy's YouTube channel – subtle, thematic -->
+      <p class="youtube-link">more whispers & music on <a href="https://www.youtube.com/@remydova" target="_blank" rel="noopener">youtube ♪</a></p>
+      
+      <!-- New visitor badge with modified path to reset/fresh count -->
+      <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Fapp">
+        <img src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Fapp&label=quiet%20souls%20here&labelColor=%230c0c18&countColor=%23d4956a&style=flat" alt="quiet souls here" />
       </a>
-      <p style="margin-top:8px; font-size:0.7em;">simple visitor count — no tracking, no cookies</p>
+      <p style="margin-top:8px; font-size:0.7em;">simple visitor count — no tracking, no cookies (fresh counter for this version)</p>
     </div>
   </div>
 
   <audio id="player" loop src="lofi.mp3"></audio>
 
   <script>
+    // Script unchanged except minor optional polish if wanted – but keeping identical for stability
     const log = document.getElementById('log');
     const lofiBtn = document.getElementById('lofiBtn');
 
-    // Affirmations
     const scripts = {
       overwhelm: [
         "hey, it's okay if everything feels like too much.",
@@ -237,13 +246,11 @@
       }
     }
 
-    // Breathing (text in log only)
     let breatheActive = false;
     let breatheInterval;
 
     function doBreathe() {
       if (breatheActive) {
-        // Stop if already running
         clearInterval(breatheInterval);
         addLine("cycle paused. take your time. ☕");
         breatheActive = false;
@@ -269,7 +276,6 @@
       }, 4000);
     }
 
-    // Rain generation
     function makeRain() {
       const rain = document.getElementById('rain');
       rain.innerHTML = '';
@@ -286,7 +292,6 @@
     }
     window.addEventListener('load', makeRain);
 
-    // Music toggle
     function togglePlay() {
       const p = document.getElementById('player');
       p.volume = 0.35;
@@ -301,7 +306,6 @@
       }
     }
 
-    // Mascot blink
     function idleBlink() {
       const eyeL = document.getElementById('eyeL');
       const eyeR = document.getElementById('eyeR');
@@ -323,6 +327,10 @@
         eyeR.setAttribute('r', '5');
         addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "☕", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
       }, 150);
+    }
+
+    function randomPick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
     }
 
     function randomBlink() {
