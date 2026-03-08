@@ -15,7 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    /* Existing styles unchanged – keeping everything identical for stability */
     :root {
       --bg: #0c0c18;
       --card: rgba(19, 19, 31, 0.92);
@@ -81,11 +80,35 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    #mascotWrap { height: 100px; position: relative; margin: 0 auto 10px; }
-    #ball { width: 80px; height: 80px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: float 4s ease-in-out infinite; cursor: pointer; }
+    #mascotWrap { 
+      height: 120px; 
+      position: relative; 
+      margin: 0 auto 20px; 
+    }
+    #ball { 
+      width: 80px; 
+      height: 80px; 
+      position: absolute; 
+      left: 50%; 
+      top: 50%; 
+      transform: translate(-50%, -50%); 
+      animation: float 4s ease-in-out infinite; 
+      cursor: pointer; 
+    }
     #ball svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #b5c7f2aa); transition: filter 0.3s; }
     #ball:hover svg { filter: drop-shadow(0 0 18px #b5c7f2ee); }
     @keyframes float { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, calc(-50% - 12px)); } }
+
+    /* Lower mascot more noticeably on laptop/desktop screens */
+    @media (min-width: 600px) {
+      #mascotWrap {
+        margin-top: 20px;
+        height: 140px;
+      }
+      #ball {
+        top: 60%; /* Slight downward shift for better balance */
+      }
+    }
 
     h1 { font-size: clamp(2.4em, 8vw, 3em); margin-bottom: 4px; color: var(--accent); text-transform: lowercase; letter-spacing: 2px; line-height: 1; text-shadow: 0 0 20px rgba(212,149,106,0.4); }
     h2 { font-family: "Space Mono", monospace; font-style: italic; font-size: clamp(0.75em, 3vw, 0.88em); font-weight: 400; margin-bottom: 22px; color: var(--muted); letter-spacing: 0.5px; }
@@ -169,17 +192,15 @@
       <button onclick="doKind('rest')">rest</button>
       <button class="lofi-btn" id="lofiBtn" onclick="togglePlay()">🎵 lofi</button>
     </div>
-    <div class="quote-divider">☕ ———— quotes ———— ☕</div>
-    <div id="log"><span class="welcome">welcome, quiet soul. ☕</span></div>
+    <div class="quote-divider">———— quotes ————</div>
+    <div id="log"><span class="welcome">welcome, quiet soul.</span></div>
 
     <div class="footer">
       <p class="credit">a remy dova experience ✦</p>
-      <!-- New: Link to Remy's YouTube channel – subtle, thematic -->
       <p class="youtube-link">more whispers & music on <a href="https://www.youtube.com/@remydova" target="_blank" rel="noopener">youtube ♪</a></p>
       
-      <!-- New visitor badge with modified path to reset/fresh count -->
-      <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Fapp">
-        <img src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Fapp&label=quiet%20souls%20here&labelColor=%230c0c18&countColor=%23d4956a&style=flat" alt="quiet souls here" />
+      <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Ffinal">
+        <img src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fremydova.github.io%2Flofi-hideout%2Ffinal&label=quiet%20souls%20here&labelColor=%230c0c18&countColor=%23d4956a&style=flat" alt="quiet souls here" />
       </a>
       <p style="margin-top:8px; font-size:0.7em;">simple visitor count — no tracking, no cookies</p>
     </div>
@@ -188,7 +209,6 @@
   <audio id="player" loop src="lofi.mp3"></audio>
 
   <script>
-    // Script unchanged except minor optional polish if wanted – but keeping identical for stability
     const log = document.getElementById('log');
     const lofiBtn = document.getElementById('lofiBtn');
 
@@ -252,7 +272,7 @@
     function doBreathe() {
       if (breatheActive) {
         clearInterval(breatheInterval);
-        addLine("cycle paused. take your time. ☕");
+        addLine("cycle paused. take your time.");
         breatheActive = false;
         return;
       }
@@ -325,7 +345,7 @@
       setTimeout(() => {
         eyeL.setAttribute('r', '5');
         eyeR.setAttribute('r', '5');
-        addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "☕", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
+        addLine(randomPick(["✨", "hi there 👋", "you're doing great.", "~", "( ´ ▽ ` )", "breathe. 🌬️", "you belong here."]));
       }, 150);
     }
 
